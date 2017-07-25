@@ -15,6 +15,9 @@
 		A946D4E91F01E8460004ED2C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A946D4E71F01E8460004ED2C /* LaunchScreen.storyboard */; };
 		A946D4F41F01E8460004ED2C /* Bouncy_PadsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946D4F31F01E8460004ED2C /* Bouncy_PadsTests.swift */; };
 		A946D4FF1F01E8460004ED2C /* Bouncy_PadsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946D4FE1F01E8460004ED2C /* Bouncy_PadsUITests.swift */; };
+		A9756CBE1F1D90AA00EC7B4C /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A9756CBC1F1D90AA00EC7B4C /* GameScene.sks */; };
+		A9756CBF1F1D90AA00EC7B4C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9756CBD1F1D90AA00EC7B4C /* GameScene.swift */; };
+		A97580CE1F11866700824D6B /* PaddleScrollNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97580CD1F11866700824D6B /* PaddleScrollNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		A946D4FA1F01E8460004ED2C /* Bouncy PadsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Bouncy PadsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A946D4FE1F01E8460004ED2C /* Bouncy_PadsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bouncy_PadsUITests.swift; sourceTree = "<group>"; };
 		A946D5001F01E8460004ED2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9756CBC1F1D90AA00EC7B4C /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		A9756CBD1F1D90AA00EC7B4C /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		A97580CD1F11866700824D6B /* PaddleScrollNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddleScrollNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,8 +106,11 @@
 			isa = PBXGroup;
 			children = (
 				A946D4DC1F01E8460004ED2C /* AppDelegate.swift */,
+				A9756CBC1F1D90AA00EC7B4C /* GameScene.sks */,
+				A9756CBD1F1D90AA00EC7B4C /* GameScene.swift */,
 				A946D4DE1F01E8460004ED2C /* art.scnassets */,
 				A946D4E01F01E8460004ED2C /* GameViewController.swift */,
+				A97580CD1F11866700824D6B /* PaddleScrollNode.swift */,
 				A946D4E21F01E8460004ED2C /* Main.storyboard */,
 				A946D4E51F01E8460004ED2C /* Assets.xcassets */,
 				A946D4E71F01E8460004ED2C /* LaunchScreen.storyboard */,
@@ -233,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A946D4DF1F01E8460004ED2C /* art.scnassets in Resources */,
+				A9756CBE1F1D90AA00EC7B4C /* GameScene.sks in Resources */,
 				A946D4E91F01E8460004ED2C /* LaunchScreen.storyboard in Resources */,
 				A946D4E61F01E8460004ED2C /* Assets.xcassets in Resources */,
 				A946D4E41F01E8460004ED2C /* Main.storyboard in Resources */,
@@ -260,7 +270,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A97580CE1F11866700824D6B /* PaddleScrollNode.swift in Sources */,
 				A946D4E11F01E8460004ED2C /* GameViewController.swift in Sources */,
+				A9756CBF1F1D90AA00EC7B4C /* GameScene.swift in Sources */,
 				A946D4DD1F01E8460004ED2C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,10 +437,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = CBKB3CSGF9;
 				INFOPLIST_FILE = "Bouncy Pads/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Marco-Matamoros.Bouncy-Pads";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -439,10 +452,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = CBKB3CSGF9;
 				INFOPLIST_FILE = "Bouncy Pads/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Marco-Matamoros.Bouncy-Pads";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -454,6 +468,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = CBKB3CSGF9;
 				INFOPLIST_FILE = "Bouncy PadsTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Marco-Matamoros.Bouncy-PadsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -470,6 +485,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = CBKB3CSGF9;
 				INFOPLIST_FILE = "Bouncy PadsTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Marco-Matamoros.Bouncy-PadsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -485,6 +501,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = CBKB3CSGF9;
 				INFOPLIST_FILE = "Bouncy PadsUITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Marco-Matamoros.Bouncy-PadsUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -500,6 +517,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = CBKB3CSGF9;
 				INFOPLIST_FILE = "Bouncy PadsUITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Marco-Matamoros.Bouncy-PadsUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -528,6 +546,7 @@
 				A946D5051F01E8460004ED2C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A946D5061F01E8460004ED2C /* Build configuration list for PBXNativeTarget "Bouncy PadsTests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +555,7 @@
 				A946D5081F01E8460004ED2C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A946D5091F01E8460004ED2C /* Build configuration list for PBXNativeTarget "Bouncy PadsUITests" */ = {
 			isa = XCConfigurationList;
@@ -544,6 +564,7 @@
 				A946D50B1F01E8460004ED2C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
