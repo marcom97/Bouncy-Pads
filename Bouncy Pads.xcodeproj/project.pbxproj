@@ -18,6 +18,7 @@
 		A9756CBE1F1D90AA00EC7B4C /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A9756CBC1F1D90AA00EC7B4C /* GameScene.sks */; };
 		A9756CBF1F1D90AA00EC7B4C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9756CBD1F1D90AA00EC7B4C /* GameScene.swift */; };
 		A97580CE1F11866700824D6B /* PaddleScrollNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97580CD1F11866700824D6B /* PaddleScrollNode.swift */; };
+		A99E60F91F29AEFD002D31DC /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = A99E60F71F29AED9002D31DC /* Actions.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		A9756CBC1F1D90AA00EC7B4C /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		A9756CBD1F1D90AA00EC7B4C /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		A97580CD1F11866700824D6B /* PaddleScrollNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddleScrollNode.swift; sourceTree = "<group>"; };
+		A99E60F71F29AED9002D31DC /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				A946D4DC1F01E8460004ED2C /* AppDelegate.swift */,
 				A9756CBC1F1D90AA00EC7B4C /* GameScene.sks */,
 				A9756CBD1F1D90AA00EC7B4C /* GameScene.swift */,
+				A99E60F71F29AED9002D31DC /* Actions.sks */,
 				A946D4DE1F01E8460004ED2C /* art.scnassets */,
 				A946D4E01F01E8460004ED2C /* GameViewController.swift */,
 				A97580CD1F11866700824D6B /* PaddleScrollNode.swift */,
@@ -242,6 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A946D4DF1F01E8460004ED2C /* art.scnassets in Resources */,
+				A99E60F91F29AEFD002D31DC /* Actions.sks in Resources */,
 				A9756CBE1F1D90AA00EC7B4C /* GameScene.sks in Resources */,
 				A946D4E91F01E8460004ED2C /* LaunchScreen.storyboard in Resources */,
 				A946D4E61F01E8460004ED2C /* Assets.xcassets in Resources */,

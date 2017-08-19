@@ -7,11 +7,10 @@
 //
 
 import SpriteKit
-import GameplayKit
 
 private var highScore = UserDefaults.standard.value(forKey: "highScore") as? Int ?? 0
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene {
     var gameStarted = false
     var gameEnded = false
     var score = 0 {
@@ -24,12 +23,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var title: SKLabelNode!
     var firstPaddleHit = false
     var animationFinished = false
-//    var gameManager: GameManager?
+    var gameManager: GameManager?
    
     
-    override func didMove(to view: SKView) {
-        self.physicsWorld.contactDelegate = self
-       
+    override func didMove(to view: SKView) {       
         title = self.childNode(withName: "title") as! SKLabelNode
         scoreLabel = self.childNode(withName: "scoreLabel") as! SKLabelNode
         playLabel = self.childNode(withName: "playLabel") as! SKLabelNode
@@ -49,7 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let scoreBox = SKShapeNode(rectOf: CGSize(width: 365, height: 280), cornerRadius: 32)
         scoreBox.fillColor = SKColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1)
         scoreBox.strokeColor = .clear
-        scoreBox.position = CGPoint(x: 0, y: 85)
+        scoreBox.position = CGPoint(x: 0, y: 260)
         scoreBox.alpha = 0
         scoreBox.setScale(0)
         scoreBox.run(SKAction(named: "FadeIn")!) {
@@ -76,7 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         retryLabel.fontSize = 72
         retryLabel.fontColor = SKColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
         retryLabel.verticalAlignmentMode = .center
-        retryLabel.position = CGPoint(x: 0, y: -175)
+        retryLabel.position = CGPoint(x: 0, y: 0)
         retryLabel.alpha = 0
         retryLabel.setScale(0)
         retryLabel.run(SKAction.sequence([SKAction(named: "FadeIn")!, SKAction(named: "Pulse")!]))
@@ -94,16 +91,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func touchUp(atPoint pos : CGPoint) {
         if gameStarted {
             if !gameEnded {
-//                paddleScrollNodeDown?.scroll()
+                gameManager?.scrollPaddle()
             }
             else if animationFinished {
-//                gameManager!.restartScene()
+                gameManager?.restartScene()
             }
         }
         else {
-            gameStarted = true
+            gameManager?.start()
             
-//            ball.physicsBody?.affectedByGravity = true
+            gameStarted = true
             
             title.removeFromParent()
             playLabel.removeFromParent()

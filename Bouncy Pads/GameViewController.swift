@@ -11,27 +11,48 @@ import QuartzCore
 import SceneKit
 import SpriteKit
 
-class GameViewController: UIViewController, SCNPhysicsContactDelegate {
-    let scrollNode = PaddleScrollNode(quantity: 6, space: 1.375, reverse: false)
-    let ball = SCNNode(geometry: SCNSphere(radius: 2))
+class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManager {
+    let backgroundSprite = SKSpriteNode(imageNamed: "Background")
+    var scnView: SCNView!
+    var scene: SCNScene!
+    var scrollNode: PaddleScrollNode!
     var firstPaddleHit = false
-    var isFirstTap = true
-//    let overlayScene = SKScene(fileNamed: "GameScene") as? GameScene
+    var ball: SCNNode!
+    var ballPhysicsBody: SCNPhysicsBody!
+    var overlayScene: GameScene!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // retrieve the SCNView
-        let scnView = self.view as! SCNView
+        scnView = self.view as! SCNView
         scnView.antialiasingMode = .multisampling4X
 //        scnView.debugOptions = .showPhysicsShapes
         
         // create a new scene
-        let scene = SCNScene()
+        scene = SCNScene()
+        
+        // create background scene
+        let backgroundScene = SKScene(size: CGSize(width: 1024, height: 1366))
+        backgroundScene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        backgroundScene.scaleMode = .aspectFill
+        backgroundScene.backgroundColor = UIColor(red:1.00, green:0.945, blue:0.91, alpha:1.0)
+
+        let backgroundColor = SKShapeNode.init(rectOf: backgroundScene.size)
+        backgroundColor.fillColor = UIColor(red:1.00, green:0.945, blue:0.91, alpha:1.0)
+        backgroundColor.strokeColor = .clear
+        backgroundScene.addChild(backgroundColor)
+        
+        backgroundSprite.alpha = 0.35
+        backgroundSprite.run(SKAction.repeatForever(SKAction.rotate(byAngle: -CGFloat.pi/2, duration: 1)))
+        backgroundScene.addChild(backgroundSprite)
+        
+        scene.background.contents = backgroundScene
         
         // setup physics for the scene
         scene.physicsWorld.contactDelegate = self
         scene.physicsWorld.gravity.y = -500
+        
         // create and add a camera to the scene
         let adjustedWidth = 1366 / scnView.bounds.height * scnView.bounds.width
         let cameraNode = SCNNode()
@@ -59,25 +80,7 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
 //        ambientLightNode.light!.color = UIColor.darkGray
 //        scene.rootNode.addChildNode(ambientLightNode)
         
-        scrollNode.position.y = -22.4375
-        scene.rootNode.addChildNode(scrollNode)
-        
-        let material = SCNMaterial()
-        material.diffuse.contents = UIColor.cyan
-        
-        ball.geometry?.insertMaterial(material, at: 0)
-        ball.position.x = -32.0625
-        scene.rootNode.addChildNode(ball)
-        
-        ball.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere.init(radius: 2), options: nil))
-        ball.physicsBody?.restitution = 0.99
-        ball.physicsBody?.damping = 0
-        ball.physicsBody?.friction = 0
-        ball.physicsBody?.angularVelocityFactor = SCNVector3Zero
-        ball.physicsBody?.categoryBitMask = 0x1
-        ball.physicsBody?.contactTestBitMask = 0xFFFFFFFF
-        ball.physicsBody?.collisionBitMask = 0xFFFFFFF7
-        ball.physicsBody?.isAffectedByGravity = false
+        setupScene()
         
         // set the scene to the view
         scnView.scene = scene
@@ -90,10 +93,6 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
         
         // configure the view
 //        scnView.backgroundColor = UIColor(red:1.00, green:0.945, blue:0.91, alpha:1.0)
-        
-        // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        scnView.addGestureRecognizer(tapGesture)
     }
     
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
@@ -111,17 +110,17 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
                 paddle.hit()
                 
                 if firstPaddleHit {
-//                    overlayScene?.score += 1
-//
-//                    if overlayScene?.score == 10 {
-//                        scrollNode.maxRepeatedSpikes = 2
-//                    }
-//                    else if overlayScene?.score == 25 {
-//                        scrollNode.maxRepeatedEmpty = 2
-//                    }
-//                    else if overlayScene?.score == 50 {
-//                        scrollNode.maxRepeatedEmpty = 1
-//                    }
+                    overlayScene?.score += 1
+
+                    if overlayScene?.score == 10 {
+                        scrollNode.maxRepeatedSpikes = 2
+                    }
+                    else if overlayScene?.score == 25 {
+                        scrollNode.maxRepeatedEmpty = 2
+                    }
+                    else if overlayScene?.score == 50 {
+                        scrollNode.maxRepeatedEmpty = 1
+                    }
                 }
                 else {
                     firstPaddleHit = true
@@ -148,19 +147,58 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
             }
             
             scrollNode.isPaused = true
-//            overlayScene?.gameOver()
+            overlayScene?.gameOver()
         }
     }
     
-    @objc
-    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        if isFirstTap {
-            ball.physicsBody?.isAffectedByGravity = true
-            isFirstTap = false
-        }
-        else {
-            scrollNode.scroll()
-        }
+    func restartScene() {
+        firstPaddleHit = false
+        
+        scrollNode.removeFromParentNode()
+        
+        setupScene()
+        
+        backgroundSprite.zRotation = 0
+    }
+    
+    func scrollPaddle() {
+        scrollNode.scroll()
+    }
+    
+    func start() {
+        ball.physicsBody = ballPhysicsBody
+    }
+    
+    func setupScene() {
+        scrollNode = PaddleScrollNode(quantity: 6, space: 1.375, reverse: false)
+        scrollNode.position.y = -22.4375
+        scene.rootNode.addChildNode(scrollNode)
+        
+        ball = SCNNode(geometry: SCNSphere(radius: 2))
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.cyan
+        
+        ball.geometry?.insertMaterial(material, at: 0)
+        ball.position.x = -32.0625
+        scene.rootNode.addChildNode(ball)
+        
+        ballPhysicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere.init(radius: 2), options: nil))
+        ballPhysicsBody.restitution = 0.99
+        ballPhysicsBody.damping = 0
+        ballPhysicsBody.friction = 0
+        ballPhysicsBody.angularVelocityFactor = SCNVector3Zero
+        ballPhysicsBody.categoryBitMask = 0x1
+        ballPhysicsBody.contactTestBitMask = 0xFFFFFFFF
+        ballPhysicsBody.collisionBitMask = 0xFFFFFFF7
+        //        ballPhysicsBody.velocityFactor = SCNVector3(x: 0, y: 1, z: 0)
+        
+        overlayScene = SKScene(fileNamed: "GameScene") as? GameScene
+        overlayScene.isPaused = false
+        overlayScene.scaleMode = .aspectFill
+        overlayScene.gameManager = self
+
+        scnView.overlaySKScene = overlayScene
     }
     
     override var shouldAutorotate: Bool {
@@ -184,4 +222,10 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
         // Release any cached data, images, etc that aren't in use.
     }
 
+}
+
+protocol GameManager {
+    func restartScene()
+    func scrollPaddle()
+    func start()
 }

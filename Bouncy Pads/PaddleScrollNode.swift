@@ -139,7 +139,7 @@ class Paddle: SCNNode {
 
         self.geometry = Paddle.paddleNode.geometry
         
-        self.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: SCNBox(width: CGFloat(self.boundingBox.max.x - self.boundingBox.min.x) + 1.125, height: CGFloat(self.boundingBox.max.y - self.boundingBox.min.y), length: CGFloat(self.boundingBox.max.z - self.boundingBox.min.z), chamferRadius: 0), options: nil))
+        self.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: SCNBox(width: CGFloat(self.boundingBox.max.x - self.boundingBox.min.x) + 1.375, height: CGFloat(self.boundingBox.max.y - self.boundingBox.min.y), length: CGFloat(self.boundingBox.max.z - self.boundingBox.min.z), chamferRadius: 0), options: nil))
         self.physicsBody?.categoryBitMask = 1 << 1
         self.physicsBody?.contactTestBitMask = 1
         self.physicsBody?.damping = 0
