@@ -42,7 +42,7 @@ class PaddleScrollNode: SCNNode {
         for i in 1...quantity + 1 {
             var spikes:Bool
             
-            if i == 1 || i == 2 {
+            if i == 1 {
                 spikes = false
             }
             else {
@@ -127,7 +127,7 @@ class PaddleScrollNode: SCNNode {
 
 class Paddle: SCNNode {
     static let paddleNode: SCNNode! = SCNScene(named: "art.scnassets/Paddle.scn")?.rootNode.childNode(withName: "Paddle", recursively: true)
-    static private let spikesNode: SCNNode! = SCNScene(named: "art.scnassets/Paddle.scn")?.rootNode.childNode(withName: "Spikes", recursively: true)
+    static let spikesNode: SCNNode! = SCNScene(named: "art.scnassets/Paddle.scn")?.rootNode.childNode(withName: "Spikes", recursively: true)
     private let fadeFactor: Double
     private(set) var hits: Int
     
@@ -139,13 +139,16 @@ class Paddle: SCNNode {
 
         self.geometry = Paddle.paddleNode.geometry
         
-        self.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: SCNBox(width: CGFloat(self.boundingBox.max.x - self.boundingBox.min.x) + 1.375, height: CGFloat(self.boundingBox.max.y - self.boundingBox.min.y), length: CGFloat(self.boundingBox.max.z - self.boundingBox.min.z), chamferRadius: 0), options: nil))
+        self.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: SCNBox(width: CGFloat(self.boundingBox.max.x - self.boundingBox.min.x), height: CGFloat(self.boundingBox.max.y - self.boundingBox.min.y), length: CGFloat(self.boundingBox.max.z - self.boundingBox.min.z), chamferRadius: 0), options: nil))
         self.physicsBody?.categoryBitMask = 1 << 1
         self.physicsBody?.contactTestBitMask = 1
         self.physicsBody?.damping = 0
         self.physicsBody?.restitution = 1
+        self.physicsBody?.friction = 0
         
         if hasSpikes {
+            self.physicsBody?.categoryBitMask = 1 << 2
+            
             let spike = SCNNode(geometry: Paddle.spikesNode.geometry)
             spike.position = SCNVector3(x: 0, y: self.boundingBox.max.y + spike.boundingBox.max.y, z: 0)
             
@@ -158,12 +161,12 @@ class Paddle: SCNNode {
     }
     
     func hit() {
-        
         hits -= 1
         
-        let fade = SCNAction.fadeOpacity(by: CGFloat(-fadeFactor), duration: 0.1 * fadeFactor)
-        
-        self.runAction(fade)
+//        let fade = SCNAction.fadeOpacity(by: CGFloat(-fadeFactor), duration: 0.1 * fadeFactor)
+//
+//        self.runAction(fade)
+        self.opacity -= CGFloat(fadeFactor)
         
         if hits <= 0 {
             self.physicsBody?.categoryBitMask = 0x1 << 3

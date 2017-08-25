@@ -13,6 +13,8 @@ import SpriteKit
 
 class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManager {
     let backgroundSprite = SKSpriteNode(imageNamed: "Background")
+    let explosionNode = SCNNode()
+    var explosion = SCNParticleSystem(named: "Explosion", inDirectory: nil)!
     var scnView: SCNView!
     var scene: SCNScene!
     var scrollNode: PaddleScrollNode!
@@ -50,7 +52,6 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
         scene.background.contents = backgroundScene
         
         // setup physics for the scene
-        scene.physicsWorld.contactDelegate = self
         scene.physicsWorld.gravity.y = -500
         
         // create and add a camera to the scene
@@ -59,7 +60,7 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
         cameraNode.camera = SCNCamera()
         cameraNode.eulerAngles = SCNVector3(-atan(1/sqrt(2)), -45 * CGFloat.pi/180, 0)
         cameraNode.camera?.usesOrthographicProjection = true
-        cameraNode.camera?.orthographicScale =  42.0625 * Double(1024 / adjustedWidth)
+        cameraNode.camera?.orthographicScale =  38.625 * Double(1024 / adjustedWidth)
         cameraNode.camera?.zNear = -60
         scene.rootNode.addChildNode(cameraNode)
         
@@ -74,12 +75,12 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
-//        let ambientLightNode = SCNNode()
-//        ambientLightNode.light = SCNLight()
-//        ambientLightNode.light!.type = .ambient
-//        ambientLightNode.light!.color = UIColor.darkGray
-//        scene.rootNode.addChildNode(ambientLightNode)
-        
+        let ambientLightNode = SCNNode()
+        ambientLightNode.light = SCNLight()
+        ambientLightNode.light!.type = .ambient
+        ambientLightNode.light!.color = UIColor.darkGray
+        scene.rootNode.addChildNode(ambientLightNode)
+
         setupScene()
         
         // set the scene to the view
@@ -95,6 +96,7 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
 //        scnView.backgroundColor = UIColor(red:1.00, green:0.945, blue:0.91, alpha:1.0)
     }
     
+    //    TODO: After every hit figure out ball vector and end game if x or z are not 0
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
         var secondBody: SCNNode
         
@@ -129,16 +131,11 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
         }
         else {
             if secondBody.physicsBody!.categoryBitMask & 1 << 2 != 0 {
-//                let explosion = SKEmitterNode(fileNamed: "Explosion")
-//                explosion?.position = ball.position
-//
-//                let effectNode = SKEffectNode()
-//                effectNode.addChild(explosion!)
-//                effectNode.zPosition = -1
-//
-//                self.addChild(effectNode)
-//
                 ball.removeFromParentNode()
+                
+                explosionNode.position = ball.presentation.position
+                
+                scene.rootNode.addChildNode(explosionNode)
             }
             else {
                 ball.physicsBody?.contactTestBitMask = 0
@@ -147,6 +144,9 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
             }
             
             scrollNode.isPaused = true
+            
+            scene.physicsWorld.contactDelegate = nil
+            
             overlayScene?.gameOver()
         }
     }
@@ -155,7 +155,11 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
         firstPaddleHit = false
         
         scrollNode.removeFromParentNode()
-        
+        explosionNode.removeFromParentNode()
+        explosionNode.removeAllParticleSystems()
+        ball.removeAllActions()
+        ball.removeFromParentNode()
+
         setupScene()
         
         backgroundSprite.zRotation = 0
@@ -170,16 +174,18 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
     }
     
     func setupScene() {
-        scrollNode = PaddleScrollNode(quantity: 6, space: 1.375, reverse: false)
+
+        scene.physicsWorld.contactDelegate = self
+
+        scrollNode = PaddleScrollNode(quantity: 4, space: 1.375, reverse: false)
         scrollNode.position.y = -22.4375
         scene.rootNode.addChildNode(scrollNode)
         
         ball = SCNNode(geometry: SCNSphere(radius: 2))
         
-        let material = SCNMaterial()
-        material.diffuse.contents = UIColor.cyan
+        let cyanMaterial = Paddle.spikesNode.geometry!.firstMaterial!
         
-        ball.geometry?.insertMaterial(material, at: 0)
+        ball.geometry?.insertMaterial(cyanMaterial, at: 0)
         ball.position.x = -32.0625
         scene.rootNode.addChildNode(ball)
         
@@ -191,7 +197,11 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate, GameManag
         ballPhysicsBody.categoryBitMask = 0x1
         ballPhysicsBody.contactTestBitMask = 0xFFFFFFFF
         ballPhysicsBody.collisionBitMask = 0xFFFFFFF7
-        //        ballPhysicsBody.velocityFactor = SCNVector3(x: 0, y: 1, z: 0)
+//        ballPhysicsBody.velocityFactor = SCNVector3(x: 0, y: 1, z: 0)
+        
+        explosion = SCNParticleSystem(named: "Explosion", inDirectory: nil)!
+        explosion.colliderNodes = scrollNode.childNodes
+        explosionNode.addParticleSystem(explosion)
         
         overlayScene = SKScene(fileNamed: "GameScene") as? GameScene
         overlayScene.isPaused = false
